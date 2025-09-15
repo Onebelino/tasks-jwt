@@ -1,6 +1,10 @@
 const Task = require('../models/Task');
 const User = require('../models/User');
 
+const renderTasksPage = (req, res) => {
+  res.render('tasks');
+}
+
 const create = async (req, res) => {
   try {
     const task = await Task.create({ ...req.body, user_id: req.user.id });
@@ -23,6 +27,7 @@ const list = async (req, res) => {
 };
 
 module.exports = {
+  renderTasksPage,
   create,
   list,
 };

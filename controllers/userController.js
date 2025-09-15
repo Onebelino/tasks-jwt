@@ -1,6 +1,15 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const {generateToken} = require('../middlewares/authMiddleware')
+
+const renderRegisterPage = (req, res) => {
+  res.render('register');
+};
+
+const renderLoginPage = (req, res) => {
+  res.render('login');
+};  
+
 const login = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -16,14 +25,14 @@ const login = async (req, res) => {
         .send({ error: 'Invalid password' });
       }
       const token = generateToken(user);
-      res.status(200).send({
-        user: {
-          id: user.id,
-          name: user.name,
-          username: user.username
-        },
-        token
+
+      // NOVA LÓGICA
+          res.cookie('jwt', token, {
+        httpOnly: true,
+        maxAge: 15 * 60 * 1000,
+        path: '/', // <-- ESSA LINHA É A SOLUÇÃO. VERIFIQUE SE ELA ESTÁ AÍ.
       });
+            res.redirect('/tasks'); 
     
   } catch (error) {
     res.status(500).send({
@@ -46,24 +55,21 @@ const register = async(req, res) => {
       }
     );
 
-    res.status(201).send({
-      user: {
-        id: user.id,
-        name: user.name,
-        username: user.username
-      }
-    });
+    res.redirect('/api/user/login'); 
 
 
-  } catch (error) {
-    res.status(500).send({
-      error: 'Error registering user',
-      details: error,
-    });
-  }
-};
+    } catch (error) {
+  console.log("ERRO AO REGISTRAR:", error); 
+  res.status(500).send({
+    error: 'Error registering user',
+    details: error,
+  });
+    }
+  };
 
 module.exports = {
+  renderRegisterPage,
+  renderLoginPage,
   login,
   register,
 };
