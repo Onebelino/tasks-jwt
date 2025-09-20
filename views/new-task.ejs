@@ -3,52 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minhas Tarefas</title>
+    <title>Nova Tarefa - Gestor de Tarefas</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <div class="tasks-container">
-        <header class="tasks-header">
-            <h1>Minhas Tarefas</h1>
-            <div>
-                <a href="/tasks/new" class="btn new-task-btn">Nova Tarefa</a>
-                <a href="/api/user/logout" class="btn logout-btn">Sair</a>
+    <div class="split-screen">
+        <div class="left-pane">
+            <div class="content">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M14 10H2v2h12v-2zm0-4H2v2h12V6zM2 16h8v-2H2v2zm19.5-4.5L23 13l-6.99 7-4.51-4.5L13 14l3.01 3L20.5 11.5z"/></svg>
+                <h1>Nova Tarefa</h1>
+                <p>Defina claramente seus objetivos para ter mais foco e produtividade.</p>
             </div>
-        </header>
-        
-        <div class="tasks-card">
-            <% if (tasks.length === 0) { %>
-                <p>Você ainda não tem tarefas. Que tal criar a primeira?</p>
-            <% } else { %>
-                <% tasks.forEach(task => { %>
-                    <div class="task-item">
-                        <div class="task-content <%= task.completed ? 'completed' : '' %>">
-                            <h3><%= task.title %></h3>
-                            <p><%= task.description %></p>
-                        </div>
-                        <div class="task-actions">
-                             <form action="/api/task/complete/<%= task.id %>" method="POST">
-                                <button type="submit" class="icon-btn" title="Completar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></button>
-                            </form>
-                            <a href="/tasks/edit/<%= task.id %>" class="icon-btn" title="Editar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/></svg></a>
-                            <form action="/api/task/delete/<%= task.id %>" method="POST" class="delete-form">
-                                <button type="submit" class="icon-btn" title="Excluir"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button>
-                            </form>
-                        </div>
+        </div>
+        <div class="right-pane">
+            <div class="form-container">
+                <form action="/api/task" method="POST">
+                    <h2>Criar Nova Tarefa</h2>
+                    <div class="form-group">
+                        <label for="title">Título da Tarefa</label>
+                        <input type="text" id="title" name="title" required>
                     </div>
-                <% }) %>
-            <% } %>
+                    <div class="form-group">
+                        <label for="description">Descrição (Opcional)</label>
+                        <textarea id="description" name="description" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="form-button">Adicionar Tarefa</button>
+                    <p class="bottom-text"><a href="/tasks">Cancelar</a></p>
+                </form>
+            </div>
         </div>
     </div>
-    <script>
-        const deleteForms = document.querySelectorAll('.delete-form');
-        deleteForms.forEach(form => {
-            form.addEventListener('submit', function (event) {
-                if (!confirm('Tem certeza que deseja excluir esta tarefa?')) {
-                    event.preventDefault();
-                }
-            });
-        });
-    </script>
 </body>
 </html>

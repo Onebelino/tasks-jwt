@@ -9,17 +9,19 @@
 <body>
     <div class="split-screen">
         <div class="left-pane">
-             <div class="content">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                <h1>Gestor de Tarefas</h1>
-                <p>Organize seu dia, controle suas prioridades e alcance seus objetivos.</p>
             </div>
-        </div>
         <div class="right-pane">
             <div class="form-container">
                 <form action="/api/user/register" method="POST">
                     <h2>Crie sua Conta</h2>
-                     <div class="form-group">
+                    
+                    <% if (typeof error !== 'undefined' && error) { %>
+                        <p style="color: #e74c3c; text-align: center; background-color: rgba(231, 76, 60, 0.1); padding: 0.75rem; border-radius: 8px;">
+                            <%= error %>
+                        </p>
+                    <% } %>
+
+                    <div class="form-group">
                         <label for="name">Seu Nome</label>
                         <input type="text" id="name" name="name" required>
                     </div>
@@ -32,7 +34,7 @@
                         <input type="password" id="password" name="password" required>
                     </div>
                     <button type="submit" class="form-button">Registrar</button>
-                     <p class="bottom-text">Já tem uma conta? <a href="/login">Faça o login</a></p>
+                    <p class="bottom-text">Já tem uma conta? <a href="/login">Faça o login</a></p>
                 </form>
             </div>
         </div>
