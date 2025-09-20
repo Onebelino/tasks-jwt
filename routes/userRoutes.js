@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { register, login, renderRegisterPage, renderLoginPage } = require('../controllers/userController');
+const { register, login, renderRegisterPage, renderLoginPage, logout } = require('../controllers/userController');
 
 const router = Router();
 
@@ -8,5 +8,7 @@ router.get('/register', renderRegisterPage);
 
 router.post('/login', login);
 router.get('/login', renderLoginPage);
+
+router.get('/logout', logout); // Adicione esta rota
 
 module.exports = router;

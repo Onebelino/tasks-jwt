@@ -11,6 +11,9 @@ const port = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Configura a pasta 'public' para arquivos estáticos como o style.css
+app.use(express.static('public'));
+
 db.sync();
 
 app.use(express.json());
@@ -24,6 +27,11 @@ app.get('/tasks', authMiddleware, taskController.renderTasksPage);
 
 app.get('/login', (req, res) => {
   res.render('login'); 
+});
+
+// ADICIONE ESTA ROTA PARA A PÁGINA INICIAL
+app.get('/', (req, res) => {
+  res.redirect('/login');
 });
 
 app.listen(port, () => {

@@ -13,28 +13,32 @@ const renderLoginPage = (req, res) => {
 const login = async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await User.findOne({ where: { username } })
-      if (!user) {
-        return res.status(404).send({ error: 'User not found' });
-      }
-      const passwordIsValid = bcrypt.compareSync(
-        password, user.password
-      );
-      if (!passwordIsValid) {
-        return res.status(401)
-        .send({ error: 'Invalid password' });
-      }
-      const token = generateToken(user);
+    const user = await User.findOne({ where: { username } });
+    
+    if (!user) {
+      return res.status(404).send({ error: 'User not found' });
+    }
 
-      // NOVA LÓGICA
-          res.cookie('jwt', token, {
-        httpOnly: true,
-        maxAge: 15 * 60 * 1000,
-        path: '/', // <-- ESSA LINHA É A SOLUÇÃO. VERIFIQUE SE ELA ESTÁ AÍ.
-      });
-            res.redirect('/tasks'); 
+    const passwordIsValid = bcrypt.compareSync(password, user.password);
+    
+    if (!passwordIsValid) {
+      return res.status(401).send({ error: 'Invalid password' });
+    }
+    
+    const token = generateToken(user);
+
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: 15 * 60 * 1000, 
+      path: '/',
+    });
+    
+    return res.redirect('/tasks'); 
     
   } catch (error) {
+    // Adicionamos este log para ver o erro detalhado no console do servidor
+    console.error('ERRO NO LOGIN:', error); 
+    
     res.status(500).send({
       error: 'Error logging in',
       details: error,
@@ -57,19 +61,24 @@ const register = async(req, res) => {
 
     res.redirect('/api/user/login'); 
 
+  } catch (error) {
+    console.log("ERRO AO REGISTRAR:", error); 
+    res.status(500).send({
+      error: 'Error registering user',
+      details: error,
+    });
+  }
+};
 
-    } catch (error) {
-  console.log("ERRO AO REGISTRAR:", error); 
-  res.status(500).send({
-    error: 'Error registering user',
-    details: error,
-  });
-    }
-  };
+const logout = (req, res) => {
+  res.cookie('jwt', '', { maxAge: 1 });
+  res.redirect('/login');
+};
 
 module.exports = {
   renderRegisterPage,
   renderLoginPage,
   login,
   register,
+  logout,
 };
