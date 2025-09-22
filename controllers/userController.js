@@ -7,7 +7,6 @@ const renderRegisterPage = (req, res) => {
   res.render('register', { error });
 };
 
-// CORRIGIDO: Agora esta função passa a variável de erro para a página de login
 const renderLoginPage = (req, res) => {
   const { error } = req.query;
   res.render('login', { error });
@@ -18,14 +17,12 @@ const login = async (req, res) => {
     const { username, password } = req.body;
     const user = await User.findOne({ where: { username } });
 
-    // CORRIGIDO: Redireciona com mensagem de erro clara
     if (!user) {
       return res.redirect('/login?error=Usuário não encontrado.');
     }
 
     const passwordIsValid = bcrypt.compareSync(password, user.password);
 
-    // CORRIGIDO: Redireciona com mensagem de erro clara
     if (!passwordIsValid) {
       return res.redirect('/login?error=Senha incorreta.');
     }

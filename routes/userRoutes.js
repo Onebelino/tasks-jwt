@@ -9,6 +9,6 @@ router.get('/register', renderRegisterPage);
 router.post('/login', login);
 router.get('/login', renderLoginPage);
 
-router.get('/logout', logout); // Adicione esta rota
+router.get('/logout', logout);
 
 module.exports = router;

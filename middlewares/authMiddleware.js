@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const generateToken = (user) => {
-  // ... (esta parte não muda)
   const payload = {
     id: user.id,
     username: user.username,
@@ -16,10 +15,9 @@ const generateToken = (user) => {
 };
 
 const authMiddleware = (req, res, next) => {
-  // ---> ADICIONE ESSAS LINHAS PARA DEBUGAR
   console.log('==============================');
   console.log('Cookies recebidos na requisição:', req.cookies);
-  // ---> FIM DAS LINHAS DE DEBUG
+
 
   const token = req.cookies.jwt;
 
